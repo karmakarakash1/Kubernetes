@@ -1,0 +1,194 @@
+************************************************************************************************** Ansible ******************************************************************************************************
+
+=======================================
+*** Configure Ansible in Ubuntu O/S ***
+=======================================
+
+Create 3 and more instance in aws in ubuntu o/s 1 is ansible server others are nodes and then connect them
+
+1. Install Ansible:
+-------------------
+sudo apt update
+sudo apt install ansible -y
+
+2. Create Private key file:
+---------------------------
+vim nv.pem
+chmod 600 /home/ubuntu/nv.pem
+
+3. Setup Ansible Folder & Files :
+---------------------------------
+mkdir /etc/ansible
+cd /etc/ansible
+
+4. Configure Ansible :
+----------------------
+vim ansible.cfg ---> 
+
+[defaults]
+inventory = /etc/ansible/hosts
+remote_user = ubuntu
+private_key_file = /path/to/your/private-key.pem or /home/ubuntu/nv.pem
+
+5. Create Ansible Inventory :
+-----------------------------
+vim hosts --->
+
+[node1]
+node1-private-ip
+
+[node2]
+node2-private-ip
+
+6. Test Ansible :
+-----------------
+ansible all -m ping
+
+7. Create and Run Ansible Playbooks :
+-------------------------------------
+vim install_apache.yml --->
+
+---
+- name: Install Apache
+  hosts: node1
+  become: yes
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+
+Run the playbook:  ansible-playbook install_apache.yml
+-----------------
+
+* Other Commands:
+-----------------
+
+ansible all --list-hosts            //show all the hosts
+ansible node1[0] --list-hosts       //show only node1 first host
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+=========================================
+*** Configure Ansible in Local System ***
+=========================================
+
+sudo apt update
+sudo apt install ansible
+ansible --version
+
+mkdir /etc/ansible
+cd /etc/ansible
+
+vim ansible.cfg --->
+---------------
+[defaults]
+inventory = /etc/ansible/hosts
+
+vim hosts --->
+---------
+[local]
+localhost ansible_connection=local
+
+[frontend]
+<Public_IP> Variable_for_user=User_Name Variable_for_private_key_file=/Path/to/private_key_file.pem
+
+34.201.219.116 ansible_ssh_user=ubuntu ansible_private_key_file=/home/sakhaglobal/keys/nv.pem
+
+
+
+vim local.yml --->
+-------------
+
+playbook1 for local system:
+---------------------------
+
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Install Nginx
+      shell:
+        sudo apt install nginx
+
+
+ansible-playbook -i hosts local.yml
+
+playbook2 for Remote system:
+----------------------------
+
+---
+- hosts: frontend
+  tasks:
+    - name: Install Nginx
+      shell:
+        sudo apt install nginx
+
+ansible-playbook -i hosts frontend.yml
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+=======================================
+  *** Change User of an Instance ***
+=======================================
+
+sudo su
+
+adduser sakgaglobal
+
+passwd 123
+cd ..
+cd sakhaglobal
+
+mkdir .ssh
+
+touch authorized_keys
+cat /home/ubuntu/.ssh/authorized_keys  --->
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaFOLzxOvu1p+RgnQY1juJRz8JvGlKjsveN1DKRM6h5S8tiN1xdfFGU813pRz23aCvFzdePgXXbt09GFT8fJ25nq/rU09ul2QfedsuPiOYgT9my/rYdIAujBWH/ir9nheXaTv+4C7K7e8OQqZ7y94ABfvsSdPpXNcz3YEvBkOpTUqu13tzhaoC2zPMd8SOnjbHoiIVd75TRAPjXP835Qv3cnAgwkqGfVtXdAANsxlaUm4p6DCzkh11xFdjtq63xiHGz+ZNYzSEBowBybquZ2KlsbmhL0zhhHRs50FnlQD1bsJjhzn1qkk5r8yY0+EfaUmoZWcI2jqWyJcs3unfigux nv
+
+vim authorized_keys --> past the ssh-key which you got
+
+exit
+exit
+
+ssh -i nv.pem sakhaglobal@34.201.219.116
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
