@@ -1,0 +1,69 @@
+** Commands for Kubernetes :
+  --------------------------
+  
+1. Create Namespace --->  kubectl create namespace <namespace_name>
+
+2. See all namespace ---> kubectl get namespaces / kubectl get namespace <namespace-name> -o yaml
+
+3. Check which namespace you are working ---> kubectl config view --minify | grep namespace
+
+4. Change namespace ---> kubectl config set-context --current --namespace=<namespace_name>
+
+5. Get information about all running pods ---> kubectl get pods / kubectl get pod / kubectl get po 
+
+6. Get information on current deployments ---> kubectl get deployments
+
+7. Get information about the replica sets ---> kubectl get rs
+
+6. Describe one pod ---> kubectl describe pod <pod>
+
+7. Delete a pod ---> kubectl delete pod <pod_name> / kubectl delete pod <pod-name> --namespace=<namespace-name>
+
+8. Expose the port of a pod (creates a new service) ---> kubectl expose pod <pod_name> --port=444 --name=frontend
+
+9. Port forward the exposed pod port to your local machine ---> kubectl port-forward <pod_name> 8080:80
+
+10. Attach to the pod ---> kubectl attach <podname> -i
+
+11. Execute a command on the pod ---> kubectl exec <pod_name> -- command
+
+12. Add a new label to a pod ---> kubectl label pods <pod> mylabel=awesome
+
+
+
+
+
+
+kubectl run -i --tty busybox --image=busybox --restart=Never -- sh: Run a shell in a pod - very useful for debugging
+
+
+
+
+kubectl get pods --show-labels: get pods, and also show labels attached to those pods
+
+kubectl rollout status deployment/helloworld-deployment: Get deployment status
+
+kubectl set image deployment/helloworld-deployment k8s-demo=k8s-demo:2: Run k8s-demo with the image label version 2
+
+kubectl edit deployment/helloworld-deployment: Edit the deployment object
+
+kubectl rollout status deployment/helloworld-deployment: Get the status of the rollout
+
+kubectl rollout history deployment/helloworld-deployment: Get the rollout history
+
+kubectl rollout undo deployment/helloworld-deployment: Rollback to previous version
+
+kubectl rollout undo deployment/helloworld-deployment --to-revision=n: Rollback to any version version
+
+kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1"
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
