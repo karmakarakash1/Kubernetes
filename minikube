@@ -1,0 +1,120 @@
+*****************************************************************************************  MINIKUBE & KUBERNETES  ***********************************************************************************************
+
+* install minikube and kubectl on your system 
+ ---------------------------------------------
+
+minikube start
+
+minikube delete
+
+minikube start --driver=docker
+
+minikube status
+
+docker logout
+
+docker login  ----> User :karmakarakash1, Password: Aky1998!@#
+
+docker images
+
+docker tag repos.sakhaglobal.com:4567/g-sakha-devops/sakha-coe/akash:dotnetapp-v1 karmakarakash1/dotnet_app          # karmakarakash1/dotnet_app is docker hub repo name 
+
+docker images
+
+docker push karmakarakash1/dotnet_app
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+deployment.yml
+---------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-app-deployment
+spec:
+  replicas: 1 # Number of desired pods
+  selector:
+    matchLabels:
+      app: dotnet-app
+  template:
+    metadata:
+      labels:
+        app: dotnet-app
+    spec:
+      containers:
+        - name: dotnet-app
+          image: karmakarakash1/dotnet_app
+          ports:
+            - containerPort: 80
+            
+            
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------       
+            
+service.yml
+-----------
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnet-app-service
+spec:
+  selector:
+    app: dotnet-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+kubectl apply -f deployment.yaml
+
+kubectl apply -f service.yaml
+
+kubectl get ns
+
+kubectl get nodes
+
+kubectl get nodes -o wide
+
+kubectl get pods
+
+kubectl get deployments
+
+kubectl get service / kubectl get svc
+
+kubectl describe pod <pod_name> # for example --> kubectl describe pod dotnet-app-deployment-66fb579fc5-jwgfm
+
+kubectl delete pod <pod_name> # for example --> kubectl delete pod dotnet-app-deployment-66fb579fc5-jwgfm
+
+
+kubectl get endpoints
+
+minikube ip
+
+kubectl get svc
+
+now past minikube_ip:service_port for example ---> 192.168.49.2:30881
+
+minikube dashboard
+
+
+
+(kubectl port-forward svc/dotnet-app-service 8001:80)              # if you are not specify 'type: NodePort' on service.yml file then you have to do this 
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+kubectl port-forward svc/prometheus-operated 9090:9090 -n monitoring
+
+kubectl port-forward svc/kanari 8896:8896 -n demo
